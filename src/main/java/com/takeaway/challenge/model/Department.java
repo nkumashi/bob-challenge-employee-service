@@ -1,33 +1,48 @@
 package com.takeaway.challenge.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * @author Naveen Kumashi
+ */
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Department")
-public class Department {
+@Table(name = "department")
+public class Department implements Serializable {
+	private static final long serialVersionUID = 5175998636055429389L;
+
+	@JsonIgnore
 	@Id
-	@NotNull
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id_department")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull
-	@Column(name = "departmentName")
-	private String departmentName;
+	@NotBlank(message = "Department name must not be blank")
+	@Column(name = "department_name")
+	private String name = "";
+	
+	public Department(String name) {
+		this.name = name;
+	}
 	
 	@Override
     public boolean equals(Object o) {
@@ -47,6 +62,6 @@ public class Department {
     
     @Override
     public String toString() {
-        return "Department details: Department name: " + this.departmentName;
+        return "Department details: Department name: " + this.name;
     }
 }

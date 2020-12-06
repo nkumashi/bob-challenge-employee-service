@@ -1,11 +1,17 @@
 package com.takeaway.challenge.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.takeaway.challenge.model.Employee;
 
-public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
+/**
+ * @author Naveen Kumashi
+ */
 
+public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
+	Optional<Employee> findById(@Param("uuid") UUID uuid);
 }
