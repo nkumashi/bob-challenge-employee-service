@@ -1,6 +1,7 @@
 package com.takeaway.challenge;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.takeaway.challenge.model.Department;
@@ -27,8 +27,6 @@ import com.takeaway.challenge.repository.EmployeeRepository;
 @AutoConfigureTestDatabase(replace=Replace.NONE)
 @DataJpaTest
 class EmployeeRepositoryTests {
-	@Autowired
-	private TestEntityManager entityManager;
 	@Autowired 
 	private EmployeeRepository employeeRepository;
 	@Autowired 
@@ -36,7 +34,6 @@ class EmployeeRepositoryTests {
 	
 	@Test
 	void contextLoads() {
-		assertThat(entityManager).isNotNull();
 		assertThat(employeeRepository).isNotNull();
 	}
 	
@@ -60,6 +57,19 @@ class EmployeeRepositoryTests {
 		assertThat(employees).isNotEmpty();
 	}
 
+	@Test
+	public void should_find_employee_by_id() {
+		Department department = new Department("Dummy");
+		departmenteRepository.save(department);
+		assertThat(department).hasFieldOrPropertyWithValue("name", "Dummy");
+		
+		LocalDate dob = LocalDate.now();
+		Employee addedEmployee = employeeRepository.save(new Employee("dummy@email.com", "First name", "Last name", dob, department));
+		
+		Optional<Employee> employee = employeeRepository.findById(addedEmployee.getId());
+		assertNotNull(employee);
+	}
+	
 	@Test
 	public void should_create_an_employee() {
 		Department department = new Department("Dummy");
@@ -109,7 +119,6 @@ class EmployeeRepositoryTests {
 		
 		employeeRepository.delete(employee);
 		Optional<Employee> optional = employeeRepository.findById(employee.getId());
-		System.out.println("deleted: " + optional.isPresent());
 		assertTrue(optional.isPresent() == false);
 	}
 }
