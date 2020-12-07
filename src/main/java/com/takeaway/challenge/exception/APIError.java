@@ -2,6 +2,10 @@ package com.takeaway.challenge.exception;
 
 import lombok.Data;
 
+/**
+ * @author Naveen Kumashi
+ */
+
 @Data
 public class APIError {
 

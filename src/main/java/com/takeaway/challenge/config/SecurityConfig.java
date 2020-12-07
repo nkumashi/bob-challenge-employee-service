@@ -15,14 +15,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)  
 public class SecurityConfig extends WebSecurityConfigurerAdapter {			
 	protected void configure(final HttpSecurity http) throws Exception {
-		// since, we have our own custom csrf implementation
-		// disabling the Spring Boot provided csrf support				
-		http
-			.authorizeRequests()
-			.anyRequest().authenticated()
-	        .and()
-	        .httpBasic()
-	        .and()
-	        .formLogin();
+		http.csrf().disable();				
+//		http
+//			.authorizeRequests()
+//			.anyRequest().authenticated()
+//	        .and()
+//	        .httpBasic()
+//	        .and()
+//	        .formLogin();
 	}  
 }

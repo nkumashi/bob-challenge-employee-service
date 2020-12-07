@@ -1,6 +1,7 @@
 package com.takeaway.challenge.service;
 
 import com.takeaway.challenge.dto.DepartmentDTO;
+import com.takeaway.challenge.model.Department;
 import com.takeaway.challenge.util.ResponseWrapper;
 
 /**
@@ -8,6 +9,14 @@ import com.takeaway.challenge.util.ResponseWrapper;
  */
 
 public interface DepartmentService {
+	/**
+	 * Saves the given department object to the database
+	 * 
+	 * @param department
+	 * @return The department object saved
+	 */
+	public ResponseWrapper<DepartmentDTO> postDepartment(Department department);
+	
 	/**
 	 * Get department by it's ID
 	 * 

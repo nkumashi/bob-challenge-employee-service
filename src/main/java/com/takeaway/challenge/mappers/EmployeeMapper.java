@@ -1,4 +1,4 @@
-package com.takeaway.challenge.util;
+package com.takeaway.challenge.mappers;
 
 import java.util.Collection;
 import java.util.List;
@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 
 import com.takeaway.challenge.dto.EmployeeDTO;
 import com.takeaway.challenge.model.Employee;
+
+/**
+ * @author Naveen Kumashi
+ */
 
 @Component
 public class EmployeeMapper {

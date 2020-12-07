@@ -25,13 +25,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.takeaway.challenge.dto.EmployeeDTO;
+import com.takeaway.challenge.mappers.EmployeeMapper;
 import com.takeaway.challenge.model.Department;
 import com.takeaway.challenge.model.Employee;
 import com.takeaway.challenge.repository.DepartmentRepository;
 import com.takeaway.challenge.repository.EmployeeRepository;
 import com.takeaway.challenge.service.EmployeeServiceImpl;
-import com.takeaway.challenge.util.EmployeeMapper;
 import com.takeaway.challenge.util.ResponseWrapper;
+
+/**
+ * @author Naveen Kumashi
+ */
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTests {		

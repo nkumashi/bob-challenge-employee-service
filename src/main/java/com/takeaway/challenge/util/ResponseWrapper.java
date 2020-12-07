@@ -5,6 +5,10 @@ import com.takeaway.challenge.exception.APIError;
 
 import lombok.Data;
 
+/**
+ * @author Naveen Kumashi
+ */
+
 @Data
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class ResponseWrapper<T> {

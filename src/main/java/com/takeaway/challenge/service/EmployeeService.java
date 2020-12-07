@@ -49,7 +49,7 @@ public interface EmployeeService {
 	 * @param employeeUuid
 	 * @return Employee object if found else error
 	 */
-	public ResponseWrapper<EmployeeDTO> getByUuid(UUID employeeUuid);
+	public ResponseWrapper<EmployeeDTO> getByUuid(UUID employeeId);
 	
 	/**
 	 * Update an employee by it's UUID
@@ -58,7 +58,7 @@ public interface EmployeeService {
 	 * @param employee
 	 * @return Updated employee object
 	 */
-	public ResponseWrapper<EmployeeDTO> putEmployee(Employee employee, UUID uuid);
+	public ResponseWrapper<EmployeeDTO> putEmployee(Employee employee, UUID employeeId);
 		
 	/**
 	 * Delete an employee

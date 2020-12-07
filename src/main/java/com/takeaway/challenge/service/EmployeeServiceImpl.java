@@ -10,21 +10,23 @@ import javax.persistence.EntityManager;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import com.takeaway.challenge.dto.EmployeeDTO;
 import com.takeaway.challenge.exception.APIError;
+import com.takeaway.challenge.mappers.EmployeeMapper;
 import com.takeaway.challenge.model.Department;
 import com.takeaway.challenge.model.Employee;
 import com.takeaway.challenge.repository.DepartmentRepository;
 import com.takeaway.challenge.repository.EmployeeRepository;
-import com.takeaway.challenge.util.EmployeeMapper;
 import com.takeaway.challenge.util.ResponseWrapper;
 
 /**
  * @author Naveen Kumashi
  */
 
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeRepository employeeRepository;
 	private DepartmentRepository departmentRepository;
@@ -49,15 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @param employee
 	 * @return The employee object saved
 	 */
-	public ResponseWrapper<EmployeeDTO> postEmployee(Employee employee) {				
-		if(!ObjectUtils.isEmpty(employee.getId())) {
-			return new ResponseWrapper<>(new APIError(0, "Error", "Employee's ID is set automatically, do not try to set it."));
-		}				
-		
-		if(ObjectUtils.isEmpty(employee.getDepartment())) {
-			return new ResponseWrapper<>(new APIError(0, "Error", "Department object cannot be null."));
-		}
-		
+	public ResponseWrapper<EmployeeDTO> postEmployee(Employee employee) {																
 		Long departmentId = employee.getDepartment().getId();
 		Optional<Department> optional = departmentRepository.findById(departmentId);
 		if(!optional.isPresent()) {
@@ -135,11 +129,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public ResponseWrapper<EmployeeDTO> putEmployee(Employee employee, UUID employeeId) {
 		if(!employeeRepository.findById(employeeId).isPresent()) {
             return new ResponseWrapper<>(new APIError(0, "Error", "Employee with ID: " + employeeId + " does not exist"));
-        }
-
-		if(ObjectUtils.isEmpty(employee.getDepartment())) {
-			return new ResponseWrapper<>(new APIError(0, "Error", "Department object cannot be null."));
-		}
+        }		
 		
         Long departmentId = employee.getDepartment().getId();
         if(!departmentRepository.findById(departmentId).isPresent()) {
