@@ -64,31 +64,20 @@ public class EmployeeServiceTests {
     private EmployeeServiceImpl employeeService;
 	
 	@Test
-	public void should_create_an_employee() {		
-		Department department = new Department("Dummy");
+	public void should_create_an_employee() {				
+		UUID uuid = UUID.randomUUID();		       
+        Department department = new Department("Dummy");
 		department.setId(1l);
 		
 		LocalDate dob = LocalDate.now();
-		Employee employee = new Employee("dummy@email.com", "First name", "Last name", dob, department);
+		Employee employee = new Employee("dummy1@email.com", "First name", "Last name", dob, department);
+		employee.setId(uuid);
 		
-		when(employeeRepository.save(any())).thenReturn(employee);
         when(departmenteRepository.findById(anyLong())).thenReturn(Optional.of(mockedDepartment));
-        when(employeeMapper.mapEntityToDTO(any())).thenReturn(mockedEmployeeDTO);
         
-        ResponseWrapper<EmployeeDTO> response = employeeService.postEmployee(employee);
-        assertNotNull(response.getData());
-        assertNull(response.getError());
-        assertEquals(mockedEmployeeDTO, response.getData());       
-	}
-	
-	@Test
-	public void should_fail_creating_employee_provided_null_department_object() {				
-		LocalDate dob = LocalDate.now();
-		Employee employee = new Employee("dummy@email.com", "First name", "Last name", dob, null);
-		        
-        ResponseWrapper<EmployeeDTO> response = employeeService.postEmployee(employee);
-        assertNull(response.getData());
-        assertNotNull(response.getError());
+        employeeService.postEmployee(employee);
+        verify(employeeRepository).save(any());
+        verify(employeeMapper, times(1)).mapEntityToDTO(any());	
 	}
 	
 	@Test
@@ -139,17 +128,14 @@ public class EmployeeServiceTests {
 		department.setId(1l);
 		
 		LocalDate dob = LocalDate.now();
-		Employee employee = new Employee("dummy@email.com", "First name", "Last name", dob, department);
+		Employee employee = new Employee("dummy1@email.com", "First name", "Last name", dob, department);
 		employee.setId(uuid);
 		
-		when(employeeRepository.findById(any())).thenReturn(Optional.of(mockedEmployee));
+		when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
         when(departmenteRepository.findById(anyLong())).thenReturn(Optional.of(mockedDepartment));
-        when(employeeRepository.save(any())).thenReturn(mockedEmployee);
-        when(employeeMapper.mapEntityToDTO(any())).thenReturn(mockedEmployeeDTO);
         
-        ResponseWrapper<EmployeeDTO> response = employeeService.putEmployee(employee, any());
-        assertNotNull(response.getData());
-        assertNull(response.getError());
-        assertEquals(mockedEmployeeDTO, response.getData());  
+        employeeService.putEmployee(employee, uuid);
+        verify(employeeRepository).save(any());
+        verify(employeeMapper, times(1)).mapEntityToDTO(any());	 
 	}
 }

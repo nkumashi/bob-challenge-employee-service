@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -47,11 +48,11 @@ class EmployeeRepositoryTests {
 	@Test
 	public void should_find_employees() {
 		Department department = new Department("Dummy");
-		departmenteRepository.save(department);
-		assertThat(department).hasFieldOrPropertyWithValue("name", "Dummy");
+		Department addedDepartment = departmenteRepository.save(department);
+		assertThat(addedDepartment).hasFieldOrPropertyWithValue("name", "Dummy");
 		
 		LocalDate dob = LocalDate.now();
-		employeeRepository.save(new Employee("dummy@email.com", "First name", "Last name", dob, department));
+		employeeRepository.save(new Employee("dummy@email.com", "First name", "Last name", dob, addedDepartment));
 		
 		Iterable<Employee> employees = employeeRepository.findAll();
 		assertThat(employees).isNotEmpty();
@@ -60,24 +61,38 @@ class EmployeeRepositoryTests {
 	@Test
 	public void should_find_employee_by_id() {
 		Department department = new Department("Dummy");
-		departmenteRepository.save(department);
-		assertThat(department).hasFieldOrPropertyWithValue("name", "Dummy");
+		Department addedDepartment = departmenteRepository.save(department);
+		assertThat(addedDepartment).hasFieldOrPropertyWithValue("name", "Dummy");
 		
 		LocalDate dob = LocalDate.now();
-		Employee addedEmployee = employeeRepository.save(new Employee("dummy@email.com", "First name", "Last name", dob, department));
+		Employee addedEmployee = employeeRepository.save(new Employee("dummy@email.com", "First name", "Last name", dob, addedDepartment));
 		
 		Optional<Employee> employee = employeeRepository.findById(addedEmployee.getId());
 		assertNotNull(employee);
 	}
 	
 	@Test
-	public void should_create_an_employee() {
+	public void should_find_employee_by_email() {
 		Department department = new Department("Dummy");
-		departmenteRepository.save(department);
-		assertThat(department).hasFieldOrPropertyWithValue("name", "Dummy");
+		Department addedDepartment = departmenteRepository.save(department);
+		assertThat(addedDepartment).hasFieldOrPropertyWithValue("name", "Dummy");
 		
 		LocalDate dob = LocalDate.now();
-		Employee employee = employeeRepository.save(new Employee("dummy@email.com", "First name", "Last name", dob, department));
+		Employee addedEmployee = employeeRepository.save(new Employee("dummy@email.com", "First name", "Last name", dob, addedDepartment));
+		
+		List<Employee> employees = employeeRepository.findByEmail(addedEmployee.getEmail());
+		assertThat(employees).isNotEmpty();
+		assertTrue(employees.size() == 1);
+	}
+	
+	@Test
+	public void should_create_an_employee() {
+		Department department = new Department("Dummy");
+		Department addedDepartment = departmenteRepository.save(department);
+		assertThat(addedDepartment).hasFieldOrPropertyWithValue("name", "Dummy");
+		
+		LocalDate dob = LocalDate.now();
+		Employee employee = employeeRepository.save(new Employee("dummy@email.com", "First name", "Last name", dob, addedDepartment));
 		assertThat(employee).hasFieldOrPropertyWithValue("email", "dummy@email.com");
 		assertThat(employee).hasFieldOrPropertyWithValue("firstName", "First name");
 		assertThat(employee).hasFieldOrPropertyWithValue("lastName", "Last name");
@@ -87,11 +102,11 @@ class EmployeeRepositoryTests {
 	@Test
 	public void should_update_an_employee() {
 		Department department = new Department("Dummy");
-		departmenteRepository.save(department);
-		assertThat(department).hasFieldOrPropertyWithValue("name", "Dummy");
+		Department addedDepartment = departmenteRepository.save(department);
+		assertThat(addedDepartment).hasFieldOrPropertyWithValue("name", "Dummy");
 		
 		LocalDate dob = LocalDate.now();
-		Employee employee = employeeRepository.save(new Employee("dummy@email.com", "First name", "Last name", dob, department));
+		Employee employee = employeeRepository.save(new Employee("dummy@email.com", "First name", "Last name", dob, addedDepartment));
 		assertThat(employee).hasFieldOrPropertyWithValue("email", "dummy@email.com");
 		assertThat(employee).hasFieldOrPropertyWithValue("firstName", "First name");
 		assertThat(employee).hasFieldOrPropertyWithValue("lastName", "Last name");
@@ -107,11 +122,11 @@ class EmployeeRepositoryTests {
 	@Test
 	public void should_delete_an_employee() {
 		Department department = new Department("Dummy");
-		departmenteRepository.save(department);
-		assertThat(department).hasFieldOrPropertyWithValue("name", "Dummy");
+		Department addedDepartment = departmenteRepository.save(department);
+		assertThat(addedDepartment).hasFieldOrPropertyWithValue("name", "Dummy");
 		
 		LocalDate dob = LocalDate.now();
-		Employee employee = employeeRepository.save(new Employee("dummy@email.com", "First name", "Last name", dob, department));
+		Employee employee = employeeRepository.save(new Employee("dummy@email.com", "First name", "Last name", dob, addedDepartment));
 		assertThat(employee).hasFieldOrPropertyWithValue("email", "dummy@email.com");
 		assertThat(employee).hasFieldOrPropertyWithValue("firstName", "First name");
 		assertThat(employee).hasFieldOrPropertyWithValue("lastName", "Last name");

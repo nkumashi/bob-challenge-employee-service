@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import com.takeaway.challenge.dto.EmployeeDTO;
 import com.takeaway.challenge.exception.APIError;
@@ -57,6 +56,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 			return new ResponseWrapper<>(new APIError(0, "Error", "Department with ID: " + departmentId + " does not exist."));
 		}
 
+		List<Employee> employeesByEmail = employeeRepository.findByEmail(employee.getEmail());
+		if(employeesByEmail.size() > 0) {
+			return new ResponseWrapper<>(new APIError(0, "Error", "Employee with email: " + employee.getEmail() + " already exist."));
+		}
+		
 		employee.setDepartment(optional.get());
 		Employee addedEmployee = employeeRepository.save(employee);
 		return new ResponseWrapper<>(employeeMapper.mapEntityToDTO(addedEmployee));		
@@ -129,6 +133,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if(!employeeRepository.findById(employeeId).isPresent()) {
             return new ResponseWrapper<>(new APIError(0, "Error", "Employee with ID: " + employeeId + " does not exist"));
         }		
+		
+		List<Employee> employeesByEmail = employeeRepository.findByEmail(employee.getEmail());
+		if(employeesByEmail.size() > 0) {
+			return new ResponseWrapper<>(new APIError(0, "Error", "Employee with email: " + employee.getEmail() + " already exist."));
+		}
 		
         Long departmentId = employee.getDepartment().getId();
         if(!departmentRepository.findById(departmentId).isPresent()) {

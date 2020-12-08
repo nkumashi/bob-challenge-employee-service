@@ -1,5 +1,6 @@
 package com.takeaway.challenge.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,4 +15,5 @@ import com.takeaway.challenge.model.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
 	Optional<Employee> findById(@Param("uuid") UUID uuid);
+	List<Employee> findByEmail(@Param("email") String email);
 }
