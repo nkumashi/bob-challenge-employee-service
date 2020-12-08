@@ -6,7 +6,7 @@ import org.modelmapper.ModelMapper;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.takeaway.challenge.dto.DepartmentDTO;
+import com.takeaway.challenge.hateos.model.DepartmentModel;
 import com.takeaway.challenge.model.Department;
 
 /**
@@ -23,9 +23,9 @@ public class DepartmentRequestParameters {
         this.departmentName = departmentName;              
     }
 	
-	public DepartmentDTO toDTO() {
+	public DepartmentModel toDTO() {
 		ModelMapper modelMapper = new ModelMapper();			    
-		return modelMapper.map(this, DepartmentDTO.class);
+		return modelMapper.map(this, DepartmentModel.class);
 	}
 	
 	public Department toEntity() {

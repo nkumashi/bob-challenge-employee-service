@@ -17,11 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//import com.takeaway.challenge.dto.EmployeeDTO;
 import com.takeaway.challenge.hateos.model.EmployeeModel;
 import com.takeaway.challenge.service.EmployeeService;
 import com.takeaway.challenge.util.ResponseWrapper;
-//import com.takeaway.challenge.vo.EmployeeId;
 import com.takeaway.challenge.vo.EmployeeRequestParameters;
 
 import io.swagger.annotations.Api;
@@ -55,7 +53,7 @@ public class EmployeeController {
 			@ApiResponse(code = 200, message = "Processed successfully", response = EmployeeModel.class),
 			@ApiResponse(code = 400, message = "Bad request")
 	})
-	@PostMapping("/employee")
+	@PostMapping(value = "/employee", produces = { "application/hal+json" })
     public ResponseEntity<Object> postEmployee(@Valid @RequestBody EmployeeRequestParameters parameters) {
 		ResponseWrapper<EmployeeModel> response = employeeService.postEmployee(parameters.toEntity());
 

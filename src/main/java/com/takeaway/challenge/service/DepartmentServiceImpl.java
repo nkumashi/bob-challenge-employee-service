@@ -1,14 +1,14 @@
 package com.takeaway.challenge.service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 
-import com.takeaway.challenge.dto.DepartmentDTO;
 import com.takeaway.challenge.exception.APIError;
-import com.takeaway.challenge.mappers.DepartmentMapper;
+import com.takeaway.challenge.hateos.assembler.DepartmentModelAssembler;
+import com.takeaway.challenge.hateos.model.DepartmentModel;
 import com.takeaway.challenge.model.Department;
 import com.takeaway.challenge.repository.DepartmentRepository;
 import com.takeaway.challenge.util.ResponseWrapper;
@@ -20,14 +20,14 @@ import com.takeaway.challenge.util.ResponseWrapper;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 	private DepartmentRepository departmentRepository;
-	private DepartmentMapper departmentMapper;
+	private DepartmentModelAssembler departmentModelAssembler;
 		
 	public DepartmentServiceImpl(
 			DepartmentRepository departmentRepository,
-			DepartmentMapper departmentMapper
+			DepartmentModelAssembler departmentModelAssembler
 	) {
 		this.departmentRepository = departmentRepository;
-		this.departmentMapper = departmentMapper;
+		this.departmentModelAssembler= departmentModelAssembler;
 	}
 	
 	/**
@@ -36,9 +36,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 	 * @param department
 	 * @return The department object saved
 	 */
-	public ResponseWrapper<DepartmentDTO> postDepartment(Department department) {											
+	public ResponseWrapper<DepartmentModel> postDepartment(Department department) {											
 		Department addedDepartment = departmentRepository.save(department);
-		return new ResponseWrapper<>(departmentMapper.mapEntityToDTO(addedDepartment));		
+		return new ResponseWrapper<>(departmentModelAssembler.toModel(addedDepartment));		
 	}
 	
 	/**
@@ -46,12 +46,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 	 * 
 	 * @return List of all departments found in the database
 	 */
-	public ResponseWrapper<List<DepartmentDTO>> getAllDepartments() {
+	public ResponseWrapper<CollectionModel<DepartmentModel>> getAllDepartments() {
 		List<Department> departmentList = departmentRepository.findAll();
-		if(departmentList.isEmpty()) {
-			return new ResponseWrapper<>(Collections.emptyList());
-		}
-        return new ResponseWrapper<>(departmentMapper.mapEntityListToDTOList(departmentList));
+        return new ResponseWrapper<>(departmentModelAssembler.toCollectionModel(departmentList));
 	}
 	
 	/**
@@ -60,12 +57,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 	 * @param departmentId
 	 * @return Department object if found else error
 	 */
-	public ResponseWrapper<DepartmentDTO> getById(Long departmentId) {				    	
+	public ResponseWrapper<DepartmentModel> getDepartmentById(Long departmentId) {				    	
     	Optional<Department> optional = departmentRepository.findById(departmentId);     
     	if(!optional.isPresent()) {
     		return new ResponseWrapper<>(new APIError(0, "Error", "Department with ID: " + departmentId + " does not exist."));
     	}
-    	return new ResponseWrapper<>(departmentMapper.mapEntityToDTO(optional.get()));
+    	return new ResponseWrapper<>(departmentModelAssembler.toModel(optional.get()));
 	}
 	
 	/**
@@ -75,13 +72,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 	 * @param department
 	 * @return Updated department object
 	 */
-	public ResponseWrapper<DepartmentDTO> putEmployee(Department department, Long departmentId) {
+	public ResponseWrapper<DepartmentModel> putEmployee(Department department, Long departmentId) {
 		if(!departmentRepository.findById(departmentId).isPresent()) {
             return new ResponseWrapper<>(new APIError(0, "Error", "Department with ID: " + departmentId + " does not exist"));
         }				
 		
 		Department addedDepartment = departmentRepository.save(department);
-        return new ResponseWrapper<>(departmentMapper.mapEntityToDTO(addedDepartment));
+        return new ResponseWrapper<>(departmentModelAssembler.toModel(addedDepartment));
 	}
 	
 	/**

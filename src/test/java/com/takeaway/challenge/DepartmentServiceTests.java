@@ -20,8 +20,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.takeaway.challenge.dto.DepartmentDTO;
-import com.takeaway.challenge.mappers.DepartmentMapper;
+import com.takeaway.challenge.hateos.assembler.DepartmentModelAssembler;
+import com.takeaway.challenge.hateos.model.DepartmentModel;
 import com.takeaway.challenge.model.Department;
 import com.takeaway.challenge.repository.DepartmentRepository;
 import com.takeaway.challenge.service.DepartmentServiceImpl;
@@ -34,13 +34,13 @@ import com.takeaway.challenge.util.ResponseWrapper;
 @ExtendWith(MockitoExtension.class)
 public class DepartmentServiceTests {		
 	@Mock
-    private DepartmentMapper departmentMapper;
+	private DepartmentModelAssembler departmentModelAssembler;
 	
 	@Mock 
 	private DepartmentRepository departmenteRepository;		
 	
 	@Mock
-	private DepartmentDTO mockedDepartmentDTO;
+	private DepartmentModel mockedDepartmentModel;
 	
 	@Mock
     private Department mockedDepartment;
@@ -52,7 +52,7 @@ public class DepartmentServiceTests {
 	public void should_create_a_department() {				        
         departmentService.postDepartment(mockedDepartment);
         verify(departmenteRepository).save(any());
-        verify(departmentMapper, times(1)).mapEntityToDTO(any());	
+        verify(departmentModelAssembler, times(1)).toModel(any());	
 	}
 	
 	@Test
@@ -63,18 +63,18 @@ public class DepartmentServiceTests {
 		
 		departmentService.getAllDepartments();
 		verify(departmenteRepository).findAll();
-		verify(departmentMapper, times(1)).mapEntityListToDTOList(anyList());	
+		verify(departmentModelAssembler, times(1)).toCollectionModel(anyList());	
 	}
 	
 	@Test
 	public void should_fetch_a_department_by_id() {		
 		when(departmenteRepository.findById(any())).thenReturn(Optional.of(mockedDepartment));
-		when(departmentMapper.mapEntityToDTO(any())).thenReturn(mockedDepartmentDTO);
+		when(departmentModelAssembler.toModel(any())).thenReturn(mockedDepartmentModel);
 		
-		ResponseWrapper<DepartmentDTO> response = departmentService.getById(mockedDepartment.getId());
+		ResponseWrapper<DepartmentModel> response = departmentService.getDepartmentById(mockedDepartment.getId());
         assertNotNull(response.getData());
         assertNull(response.getError());
-        assertEquals(mockedDepartmentDTO, response.getData());
+        assertEquals(mockedDepartmentModel, response.getData());
 	}
 	
 	@Test
@@ -83,6 +83,6 @@ public class DepartmentServiceTests {
         
         departmentService.putEmployee(mockedDepartment, mockedDepartment.getId());
         verify(departmenteRepository).save(any());
-        verify(departmentMapper, times(1)).mapEntityToDTO(any());	 
+        verify(departmentModelAssembler, times(1)).toModel(any());	 
 	}
 }

@@ -1,8 +1,8 @@
 package com.takeaway.challenge.service;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
-import com.takeaway.challenge.dto.DepartmentDTO;
+import com.takeaway.challenge.hateos.model.DepartmentModel;
 import com.takeaway.challenge.model.Department;
 import com.takeaway.challenge.util.ResponseWrapper;
 
@@ -17,14 +17,14 @@ public interface DepartmentService {
 	 * @param department
 	 * @return The department object saved
 	 */
-	public ResponseWrapper<DepartmentDTO> postDepartment(Department department);
+	public ResponseWrapper<DepartmentModel> postDepartment(Department department);
 	
 	/**
 	 * Get all departments
 	 * 
 	 * @return List of all departments found in the database
 	 */
-	public ResponseWrapper<List<DepartmentDTO>> getAllDepartments();
+	public ResponseWrapper<CollectionModel<DepartmentModel>> getAllDepartments();
 	
 	/**
 	 * Get department by it's ID
@@ -32,7 +32,7 @@ public interface DepartmentService {
 	 * @param departmentId
 	 * @return Department object if found else error
 	 */
-	public ResponseWrapper<DepartmentDTO> getById(Long departmentId);
+	public ResponseWrapper<DepartmentModel> getDepartmentById(Long departmentId);
 	
 	/**
 	 * Update a department by it's id
@@ -41,7 +41,7 @@ public interface DepartmentService {
 	 * @param department
 	 * @return Updated department object
 	 */
-	public ResponseWrapper<DepartmentDTO> putEmployee(Department department, Long departmentId);
+	public ResponseWrapper<DepartmentModel> putEmployee(Department department, Long departmentId);
 	
 	/**
 	 * Delete a department

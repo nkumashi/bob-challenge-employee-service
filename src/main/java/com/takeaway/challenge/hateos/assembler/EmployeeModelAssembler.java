@@ -17,8 +17,11 @@ import com.takeaway.challenge.model.Employee;
 
 @Component
 public class EmployeeModelAssembler extends RepresentationModelAssemblerSupport<Employee, EmployeeModel> {
-	public EmployeeModelAssembler() {
+	private DepartmentModelAssembler departmentModelAssembler;
+	
+	public EmployeeModelAssembler(DepartmentModelAssembler departmentModelAssembler) {
         super(EmployeeController.class, EmployeeModel.class);
+        this.departmentModelAssembler = departmentModelAssembler;
     }
 
 	@Override
@@ -33,7 +36,7 @@ public class EmployeeModelAssembler extends RepresentationModelAssemblerSupport<
 		employeeModel.setEmail(entity.getEmail());
 		employeeModel.setFirstName(entity.getFirstName());
 		employeeModel.setLastName(entity.getLastName());
-		//employeeModel.setDepartment(entity.getDepartment());
+		employeeModel.setDepartment(departmentModelAssembler.toModel(entity.getDepartment()));
 
         return employeeModel;
 	}
