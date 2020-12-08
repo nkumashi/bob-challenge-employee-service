@@ -10,7 +10,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.takeaway.challenge.dto.EmployeeDTO;
+//import com.takeaway.challenge.dto.EmployeeDTO;
+import com.takeaway.challenge.hateos.model.EmployeeModel;
 import com.takeaway.challenge.model.Department;
 import com.takeaway.challenge.model.Employee;
 
@@ -59,9 +60,9 @@ public class EmployeeRequestParameters {
         this.dob = dob;            
     }
 	
-	public EmployeeDTO toDTO() {
+	public EmployeeModel toDTO() {
 		ModelMapper modelMapper = new ModelMapper();			    
-		return modelMapper.map(this, EmployeeDTO.class);
+		return modelMapper.map(this, EmployeeModel.class);
 	}
 	
 	public Employee toEntity() {

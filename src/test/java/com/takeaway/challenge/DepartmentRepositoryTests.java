@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.takeaway.challenge.model.Department;
 import com.takeaway.challenge.repository.DepartmentRepository;
+import com.takeaway.challenge.repository.EmployeeRepository;
 
 /**
  * @author Naveen Kumashi
@@ -25,6 +26,9 @@ import com.takeaway.challenge.repository.DepartmentRepository;
 @DataJpaTest
 public class DepartmentRepositoryTests {
 	@Autowired 
+	private EmployeeRepository employeeRepository;
+	
+	@Autowired 
 	private DepartmentRepository departmenteRepository;
 	
 	@Test
@@ -34,6 +38,7 @@ public class DepartmentRepositoryTests {
 	
 	@Test
 	public void should_find_no_departments_if_repository_is_empty() {
+		employeeRepository.deleteAll();
 		departmenteRepository.deleteAll();
 		Iterable<Department> departments = departmenteRepository.findAll();
 

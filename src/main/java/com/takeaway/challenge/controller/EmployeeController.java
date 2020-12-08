@@ -1,7 +1,12 @@
 package com.takeaway.challenge.controller;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
+
 import javax.validation.Valid;
 
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.takeaway.challenge.dto.EmployeeDTO;
+//import com.takeaway.challenge.dto.EmployeeDTO;
+import com.takeaway.challenge.hateos.model.EmployeeModel;
 import com.takeaway.challenge.service.EmployeeService;
 import com.takeaway.challenge.util.ResponseWrapper;
-import com.takeaway.challenge.vo.EmployeeId;
+//import com.takeaway.challenge.vo.EmployeeId;
 import com.takeaway.challenge.vo.EmployeeRequestParameters;
 
 import io.swagger.annotations.Api;
@@ -44,14 +50,38 @@ public class EmployeeController {
 		return "Hello from Server!";
 	}
 
-	@ApiOperation(value = "View employee information by UUID")
+	@ApiOperation(value = "Save a new Employee record")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Processed successfully", response = EmployeeDTO.class),
-			@ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+			@ApiResponse(code = 200, message = "Processed successfully", response = EmployeeModel.class),
+			@ApiResponse(code = 400, message = "Bad request")
 	})
 	@PostMapping("/employee")
     public ResponseEntity<Object> postEmployee(@Valid @RequestBody EmployeeRequestParameters parameters) {
-		ResponseWrapper<EmployeeDTO> response = employeeService.postEmployee(parameters.toEntity());
+		ResponseWrapper<EmployeeModel> response = employeeService.postEmployee(parameters.toEntity());
+
+        return (response.getData() != null) ?
+                new ResponseEntity<>(response.getData(), null, HttpStatus.OK) :
+                new ResponseEntity<>(response.getError(), null, HttpStatus.BAD_REQUEST);
+    }
+	
+	@ApiOperation(value = "Fetch all employees")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Processed successfully", response = List.class)
+	})
+	@GetMapping(value = "/employees", produces = { "application/hal+json" })
+    public ResponseEntity<Object> getAllEmployees() {
+		ResponseWrapper<CollectionModel<EmployeeModel>> response = employeeService.getAllEmployees();
+        return new ResponseEntity<>(response.getData(),null, HttpStatus.OK);        
+    }
+	
+	@ApiOperation(value = "View employee information by UUID")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Processed successfully", response = EmployeeModel.class),
+			@ApiResponse(code = 400, message = "Bad request")
+	})
+	@GetMapping(value = "/employee/{employeeId}", produces = { "application/hal+json" })
+    public ResponseEntity<Object> getEmployeeById(@Valid @PathVariable("employeeId") String employeeId) {
+		ResponseWrapper<EmployeeModel> response = employeeService.getEmployeeById(UUID.fromString(employeeId));
 
         return (response.getData() != null) ?
                 new ResponseEntity<>(response.getData(), null, HttpStatus.OK) :

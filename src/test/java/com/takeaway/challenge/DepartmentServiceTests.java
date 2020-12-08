@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +23,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.takeaway.challenge.dto.DepartmentDTO;
 import com.takeaway.challenge.mappers.DepartmentMapper;
 import com.takeaway.challenge.model.Department;
-import com.takeaway.challenge.model.Employee;
 import com.takeaway.challenge.repository.DepartmentRepository;
 import com.takeaway.challenge.service.DepartmentServiceImpl;
 import com.takeaway.challenge.util.ResponseWrapper;
@@ -35,18 +32,12 @@ import com.takeaway.challenge.util.ResponseWrapper;
  */
 
 @ExtendWith(MockitoExtension.class)
-public class DepartmentServiceTests {
-	@Mock
-    private EntityManager entityManager;
-	
+public class DepartmentServiceTests {		
 	@Mock
     private DepartmentMapper departmentMapper;
 	
 	@Mock 
 	private DepartmentRepository departmenteRepository;		
-	
-	@Mock
-	private Employee mockedEmployee;
 	
 	@Mock
 	private DepartmentDTO mockedDepartmentDTO;

@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.takeaway.challenge.controller.EmployeeController;
-import com.takeaway.challenge.model.Department;
 import com.takeaway.challenge.service.EmployeeService;
 import com.takeaway.challenge.vo.EmployeeRequestParameters;
 
@@ -28,9 +27,6 @@ import com.takeaway.challenge.vo.EmployeeRequestParameters;
 public class EmployeeControllerTests {
 	@Autowired
 	private MockMvc mockMvc;
-
-	@Autowired
-	private ObjectMapper objectMapper;
 	
 	@MockBean
 	private EmployeeService employeeService;
@@ -42,9 +38,6 @@ public class EmployeeControllerTests {
 	
 	@BeforeEach
     public void setup() {
-        // We would need this line if we would not use the MockitoExtension
-        // MockitoAnnotations.initMocks(this);
-        // Here we can't use @AutoConfigureJsonTesters because there isn't a Spring context
         JacksonTester.initFields(this, new ObjectMapper());
         // MockMvc standalone approach
         mockMvc = MockMvcBuilders.standaloneSetup(employeeController)

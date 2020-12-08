@@ -24,8 +24,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.takeaway.challenge.dto.EmployeeDTO;
-import com.takeaway.challenge.mappers.EmployeeMapper;
+import com.takeaway.challenge.hateos.assembler.EmployeeModelAssembler;
+import com.takeaway.challenge.hateos.model.EmployeeModel;
 import com.takeaway.challenge.model.Department;
 import com.takeaway.challenge.model.Employee;
 import com.takeaway.challenge.repository.DepartmentRepository;
@@ -46,7 +46,7 @@ public class EmployeeServiceTests {
     private EmployeeRepository employeeRepository;		
 	
 	@Mock
-	private EmployeeMapper employeeMapper;
+	EmployeeModelAssembler employeeModelAssembler;
 	
 	@Mock 
 	private DepartmentRepository departmenteRepository;		
@@ -55,7 +55,7 @@ public class EmployeeServiceTests {
 	private Employee mockedEmployee;
 	
 	@Mock
-	private EmployeeDTO mockedEmployeeDTO;
+	private EmployeeModel mockedEmployeeModel;
 	
 	@Mock
     private Department mockedDepartment;
@@ -77,7 +77,7 @@ public class EmployeeServiceTests {
         
         employeeService.postEmployee(employee);
         verify(employeeRepository).save(any());
-        verify(employeeMapper, times(1)).mapEntityToDTO(any());	
+        verify(employeeModelAssembler, times(1)).toModel(any());	
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ public class EmployeeServiceTests {
 		LocalDate dob = LocalDate.now();
 		Employee employee = new Employee("dummy@email.com", "First name", "Last name", dob, department);
 		        
-        ResponseWrapper<EmployeeDTO> response = employeeService.postEmployee(employee);
+        ResponseWrapper<EmployeeModel> response = employeeService.postEmployee(employee);
         assertNull(response.getData());
         assertNotNull(response.getError());
 	}
@@ -100,7 +100,7 @@ public class EmployeeServiceTests {
 		
 		employeeService.getAllEmployees();
 		verify(employeeRepository).findAll();
-		verify(employeeMapper, times(1)).mapEntityListToDTOList(anyList());	
+		verify(employeeModelAssembler, times(1)).toCollectionModel(anyList());	
 	}
 	
 	@Test
@@ -113,12 +113,12 @@ public class EmployeeServiceTests {
 		Employee employee = new Employee("dummy@email.com", "First name", "Last name", dob, department);
 		employee.setId(uuid);
 		when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
-		when(employeeMapper.mapEntityToDTO(any())).thenReturn(mockedEmployeeDTO);
+		when(employeeModelAssembler.toModel(any())).thenReturn(mockedEmployeeModel);
 		
-		ResponseWrapper<EmployeeDTO> response = employeeService.getByUuid(uuid);
+		ResponseWrapper<EmployeeModel> response = employeeService.getEmployeeById(uuid);
         assertNotNull(response.getData());
         assertNull(response.getError());
-        assertEquals(mockedEmployeeDTO, response.getData());
+        assertEquals(mockedEmployeeModel, response.getData());
 	}
 	
 	@Test
@@ -136,6 +136,6 @@ public class EmployeeServiceTests {
         
         employeeService.putEmployee(employee, uuid);
         verify(employeeRepository).save(any());
-        verify(employeeMapper, times(1)).mapEntityToDTO(any());	 
+        verify(employeeModelAssembler, times(1)).toModel(any());	 
 	}
 }

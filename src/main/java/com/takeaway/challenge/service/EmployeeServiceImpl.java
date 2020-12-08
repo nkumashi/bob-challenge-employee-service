@@ -1,7 +1,6 @@
 package com.takeaway.challenge.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,11 +9,12 @@ import javax.persistence.EntityManager;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 
-import com.takeaway.challenge.dto.EmployeeDTO;
 import com.takeaway.challenge.exception.APIError;
-import com.takeaway.challenge.mappers.EmployeeMapper;
+import com.takeaway.challenge.hateos.assembler.EmployeeModelAssembler;
+import com.takeaway.challenge.hateos.model.EmployeeModel;
 import com.takeaway.challenge.model.Department;
 import com.takeaway.challenge.model.Employee;
 import com.takeaway.challenge.repository.DepartmentRepository;
@@ -29,18 +29,19 @@ import com.takeaway.challenge.util.ResponseWrapper;
 public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeRepository employeeRepository;
 	private DepartmentRepository departmentRepository;
-	private EmployeeMapper employeeMapper;
     private EntityManager entityManager;
+    private EmployeeModelAssembler employeeModelAssembler;
 
 	public EmployeeServiceImpl(
 			EmployeeRepository employeeRepository,
 			DepartmentRepository departmentRepository,
-			EmployeeMapper employeeMapper,
-			EntityManager entityManager) {
+			EntityManager entityManager,
+			EmployeeModelAssembler employeeModelAssembler
+	) {
 		this.employeeRepository = employeeRepository;
 		this.departmentRepository = departmentRepository;
-		this.employeeMapper = employeeMapper;
 		this.entityManager = entityManager;
+		this.employeeModelAssembler = employeeModelAssembler;
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @param employee
 	 * @return The employee object saved
 	 */
-	public ResponseWrapper<EmployeeDTO> postEmployee(Employee employee) {																
+	public ResponseWrapper<EmployeeModel> postEmployee(Employee employee) {																
 		Long departmentId = employee.getDepartment().getId();
 		Optional<Department> optional = departmentRepository.findById(departmentId);
 		if(!optional.isPresent()) {
@@ -63,7 +64,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		employee.setDepartment(optional.get());
 		Employee addedEmployee = employeeRepository.save(employee);
-		return new ResponseWrapper<>(employeeMapper.mapEntityToDTO(addedEmployee));		
+		return new ResponseWrapper<>(employeeModelAssembler.toModel(addedEmployee));		
 	}
 
 	/**
@@ -71,12 +72,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * 
 	 * @return List of all employees found in the database
 	 */
-	public ResponseWrapper<List<EmployeeDTO>> getAllEmployees() {
+	public ResponseWrapper<CollectionModel<EmployeeModel>> getAllEmployees() {
 		List<Employee> employeeList = employeeRepository.findAll();
-		if(employeeList.isEmpty()) {
-			return new ResponseWrapper<>(Collections.emptyList());
-		}
-        return new ResponseWrapper<>(employeeMapper.mapEntityListToDTOList(employeeList));
+        return new ResponseWrapper<>(employeeModelAssembler.toCollectionModel(employeeList));
 	}
 	
 	/**
@@ -84,14 +82,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * 
 	 * @return List of all employees by page found in the database
 	 */
-	public ResponseWrapper<List<EmployeeDTO>> getPagedEmployees(Pageable page) {
+	public ResponseWrapper<CollectionModel<EmployeeModel>> getPagedEmployees(Pageable page) {
 		List<Employee> employeeList = new ArrayList<Employee>();
 		Page<Employee> pages = employeeRepository.findAll(page);
 		employeeList = pages.getContent();
-		if(employeeList.isEmpty()) {
-			return new ResponseWrapper<>(Collections.emptyList());
-		}
-        return new ResponseWrapper<>(employeeMapper.mapEntityListToDTOList(employeeList));
+        return new ResponseWrapper<>(employeeModelAssembler.toCollectionModel(employeeList));
 	}
 	
 	/**
@@ -99,13 +94,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * 
 	 * @return List of all employees by limit found in the database
 	 */
-	public ResponseWrapper<List<EmployeeDTO>> getEmployeesByLimit(int limit) {
+	public ResponseWrapper<CollectionModel<EmployeeModel>> getEmployeesByLimit(int limit) {
 		List<Employee> employeeList = entityManager.createQuery("SELECT e FROM Employee e ORDER BY e.firstName",
 				Employee.class).setMaxResults(limit).getResultList();
-		if(employeeList.isEmpty()) {
-			return new ResponseWrapper<>(Collections.emptyList());
-		}
-        return new ResponseWrapper<>(employeeMapper.mapEntityListToDTOList(employeeList));
+        return new ResponseWrapper<>(employeeModelAssembler.toCollectionModel(employeeList));
 	}
 	
 	/**
@@ -114,12 +106,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @param employeeUuid
 	 * @return Employee object if found else error
 	 */
-	public ResponseWrapper<EmployeeDTO> getByUuid(UUID employeeId) {
+	public ResponseWrapper<EmployeeModel> getEmployeeById(UUID employeeId) {
 		Optional<Employee> optional = employeeRepository.findById(employeeId);
 		if(!optional.isPresent()) {
 			return new ResponseWrapper<>(new APIError(0, "Error", "Employee with ID: " + employeeId + " does not exist."));
 		}
-		return new ResponseWrapper<>(employeeMapper.mapEntityToDTO(optional.get()));
+		return new ResponseWrapper<>(employeeModelAssembler.toModel(optional.get()));
 	}
 
 	/**
@@ -129,7 +121,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @param employee
 	 * @return Updated employee object
 	 */
-	public ResponseWrapper<EmployeeDTO> putEmployee(Employee employee, UUID employeeId) {
+	public ResponseWrapper<EmployeeModel> putEmployee(Employee employee, UUID employeeId) {
 		if(!employeeRepository.findById(employeeId).isPresent()) {
             return new ResponseWrapper<>(new APIError(0, "Error", "Employee with ID: " + employeeId + " does not exist"));
         }		
@@ -146,7 +138,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setId(employeeId);
         Employee addedEmployee = employeeRepository.save(employee);
 
-        return new ResponseWrapper<>(employeeMapper.mapEntityToDTO(addedEmployee));
+        return new ResponseWrapper<>(employeeModelAssembler.toModel(addedEmployee));
 	}
 	
 	/**

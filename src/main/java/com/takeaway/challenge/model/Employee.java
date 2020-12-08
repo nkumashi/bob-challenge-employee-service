@@ -18,8 +18,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +36,6 @@ import lombok.Setter;
 public class Employee implements Serializable {
 	private static final long serialVersionUID = -4040908041200864357L;
 
-	@JsonIgnore
 	@Id
 	@Column(name = "id_employee", columnDefinition = "BINARY(16)")	
 	@GeneratedValue(generator = "uuid2")

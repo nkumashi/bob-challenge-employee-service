@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +28,6 @@ import lombok.Setter;
 public class Department implements Serializable {
 	private static final long serialVersionUID = 5175998636055429389L;
 
-	@JsonIgnore
 	@Id
 	@Column(name = "id_department")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
