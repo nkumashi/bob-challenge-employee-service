@@ -134,7 +134,7 @@ public class EmployeeServiceTests {
 		when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
         when(departmenteRepository.findById(anyLong())).thenReturn(Optional.of(mockedDepartment));
         
-        employeeService.putEmployee(employee, uuid);
+        employeeService.putEmployee(employee);
         verify(employeeRepository).save(any());
         verify(employeeModelAssembler, times(1)).toModel(any());	 
 	}

@@ -59,7 +59,7 @@ public interface EmployeeService {
 	 * @param employee
 	 * @return Updated employee object
 	 */
-	public ResponseWrapper<EmployeeModel> putEmployee(Employee employee, UUID employeeId);
+	public ResponseWrapper<EmployeeModel> putEmployee(Employee employee);
 		
 	/**
 	 * Delete an employee

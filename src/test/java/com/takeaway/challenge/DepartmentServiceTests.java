@@ -81,7 +81,7 @@ public class DepartmentServiceTests {
 	public void should_update_a_department_by_id() {
         when(departmenteRepository.findById(anyLong())).thenReturn(Optional.of(mockedDepartment));
         
-        departmentService.putEmployee(mockedDepartment, mockedDepartment.getId());
+        departmentService.putDepartment(mockedDepartment);
         verify(departmenteRepository).save(any());
         verify(departmentModelAssembler, times(1)).toModel(any());	 
 	}

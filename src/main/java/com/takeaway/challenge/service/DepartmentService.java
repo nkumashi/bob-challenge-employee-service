@@ -41,7 +41,7 @@ public interface DepartmentService {
 	 * @param department
 	 * @return Updated department object
 	 */
-	public ResponseWrapper<DepartmentModel> putEmployee(Department department, Long departmentId);
+	public ResponseWrapper<DepartmentModel> putDepartment(Department department);
 	
 	/**
 	 * Delete a department

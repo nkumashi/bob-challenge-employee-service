@@ -121,9 +121,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @param employee
 	 * @return Updated employee object
 	 */
-	public ResponseWrapper<EmployeeModel> putEmployee(Employee employee, UUID employeeId) {
-		if(!employeeRepository.findById(employeeId).isPresent()) {
-            return new ResponseWrapper<>(new APIError(0, "Error", "Employee with ID: " + employeeId + " does not exist"));
+	public ResponseWrapper<EmployeeModel> putEmployee(Employee employee) {
+		if(!employeeRepository.findById(employee.getId()).isPresent()) {
+            return new ResponseWrapper<>(new APIError(0, "Error", "Employee with ID: " + employee.getId() + " does not exist"));
         }		
 		
 		List<Employee> employeesByEmail = employeeRepository.findByEmail(employee.getEmail());
@@ -135,7 +135,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(!departmentRepository.findById(departmentId).isPresent()) {
             return new ResponseWrapper<>(new APIError(0, "Error", "Department with ID: " + departmentId + " does not exist"));
         }
-        employee.setId(employeeId);
         Employee addedEmployee = employeeRepository.save(employee);
 
         return new ResponseWrapper<>(employeeModelAssembler.toModel(addedEmployee));

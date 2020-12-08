@@ -72,9 +72,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 	 * @param department
 	 * @return Updated department object
 	 */
-	public ResponseWrapper<DepartmentModel> putEmployee(Department department, Long departmentId) {
-		if(!departmentRepository.findById(departmentId).isPresent()) {
-            return new ResponseWrapper<>(new APIError(0, "Error", "Department with ID: " + departmentId + " does not exist"));
+	public ResponseWrapper<DepartmentModel> putDepartment(Department department) {
+		if(!departmentRepository.findById(department.getId()).isPresent()) {
+            return new ResponseWrapper<>(new APIError(0, "Error", "Department with ID: " + department.getId() + " does not exist"));
         }				
 		
 		Department addedDepartment = departmentRepository.save(department);
