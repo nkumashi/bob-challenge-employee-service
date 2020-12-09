@@ -11,6 +11,7 @@ import com.takeaway.challenge.hateos.assembler.DepartmentModelAssembler;
 import com.takeaway.challenge.hateos.model.DepartmentModel;
 import com.takeaway.challenge.model.Department;
 import com.takeaway.challenge.repository.DepartmentRepository;
+import com.takeaway.challenge.repository.EmployeeRepository;
 import com.takeaway.challenge.util.ResponseWrapper;
 
 /**
@@ -19,15 +20,18 @@ import com.takeaway.challenge.util.ResponseWrapper;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
+	private EmployeeRepository employeeRepository;
 	private DepartmentRepository departmentRepository;
 	private DepartmentModelAssembler departmentModelAssembler;
 		
 	public DepartmentServiceImpl(
+			EmployeeRepository employeeRepository,
 			DepartmentRepository departmentRepository,
 			DepartmentModelAssembler departmentModelAssembler
 	) {
 		this.departmentRepository = departmentRepository;
 		this.departmentModelAssembler= departmentModelAssembler;
+		this.employeeRepository = employeeRepository;
 	}
 	
 	/**
@@ -90,6 +94,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		if(!departmentRepository.findById(departmentId).isPresent()) {
             return new ResponseWrapper<>(new APIError(0, "Error", "Department with Id " + departmentId + " does not exist"));
         }
+		employeeRepository.deleteAll();
 		departmentRepository.deleteById(departmentId);
 
         if(departmentRepository.findById(departmentId).isPresent()) {

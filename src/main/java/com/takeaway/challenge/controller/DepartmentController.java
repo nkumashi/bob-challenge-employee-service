@@ -100,7 +100,7 @@ public class DepartmentController {
 			@ApiResponse(code = 400, message = "Bad request")
 	})
 	@DeleteMapping(value = "/department/{departmentId}", produces = { "application/hal+json" })
-    public ResponseEntity<Object> deleteDepartment(@PathVariable Long departmentId) {
+    public ResponseEntity<Object> deleteDepartment(@Valid @PathVariable("departmentId") Long departmentId) {
 		ResponseWrapper<Object> response = departmentService.deleteDepartmentById(departmentId);
 
         return (response.getData() != null) ?

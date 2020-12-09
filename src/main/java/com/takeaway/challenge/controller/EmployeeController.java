@@ -106,7 +106,7 @@ public class EmployeeController {
 			@ApiResponse(code = 400, message = "Bad request")
 	})
 	@DeleteMapping(value = "/employee/{employeeId}", produces = { "application/hal+json" })
-    public ResponseEntity<Object> deleteEmployee(@PathVariable String employeeId) {
+    public ResponseEntity<Object> deleteEmployee(@Valid @PathVariable("departmentId") String employeeId) {
 		ResponseWrapper<Object> response = employeeService.deleteEmployeeById(UUID.fromString(employeeId));
 
         return (response.getData() != null) ?

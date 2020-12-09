@@ -9,11 +9,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.takeaway.challenge.hateos.model.DepartmentModel;
 import com.takeaway.challenge.model.Department;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * @author Naveen Kumashi
  */
 
+@Data
+@NoArgsConstructor
 public class DepartmentRequestParameters {	
+	@NotNull(message = "Department Id cannot be null/empty.")
+	private Long departmentId;
+	
 	@NotNull(message = "Department name cannot be null/empty.")
 	private String departmentName;
 	
