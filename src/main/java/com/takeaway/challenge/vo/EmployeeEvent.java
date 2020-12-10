@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmployeeEvent {
 	private String eventName;
-	private LocalDateTime eventDateTime;
+	private LocalDateTime eventTimestamp;
 }

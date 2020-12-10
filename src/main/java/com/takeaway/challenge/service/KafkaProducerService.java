@@ -26,7 +26,7 @@ public class KafkaProducerService {
     public void sendMessage(String message) {
     	EmployeeEvent event = new EmployeeEvent();
     	event.setEventName(message);
-    	event.setEventDateTime(LocalDateTime.now());
+    	event.setEventTimestamp(LocalDateTime.now());
         this.kafkaTemplate.send(AppConstants.TOPIC_NAME, message);
         log.info(String.format("Message sent -> %s", event));
     }
