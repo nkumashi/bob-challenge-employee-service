@@ -32,14 +32,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private DepartmentRepository departmentRepository;
     private EntityManager entityManager;
     private EmployeeModelAssembler employeeModelAssembler;
-    private KafKaProducerService producerService;
+    private KafkaProducerService producerService;
 
 	public EmployeeServiceImpl(
 			EmployeeRepository employeeRepository,
 			DepartmentRepository departmentRepository,
 			EntityManager entityManager,
 			EmployeeModelAssembler employeeModelAssembler,
-			KafKaProducerService producerService
+			KafkaProducerService producerService
 	) {
 		this.employeeRepository = employeeRepository;
 		this.departmentRepository = departmentRepository;
