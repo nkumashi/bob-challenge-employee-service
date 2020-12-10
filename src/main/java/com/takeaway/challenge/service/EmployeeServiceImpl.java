@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
 
+import com.takeaway.challenge.constants.AppConstants;
 import com.takeaway.challenge.exception.APIError;
 import com.takeaway.challenge.hateos.assembler.EmployeeModelAssembler;
 import com.takeaway.challenge.hateos.model.EmployeeModel;
@@ -31,17 +32,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private DepartmentRepository departmentRepository;
     private EntityManager entityManager;
     private EmployeeModelAssembler employeeModelAssembler;
+    private KafKaProducerService producerService;
 
 	public EmployeeServiceImpl(
 			EmployeeRepository employeeRepository,
 			DepartmentRepository departmentRepository,
 			EntityManager entityManager,
-			EmployeeModelAssembler employeeModelAssembler
+			EmployeeModelAssembler employeeModelAssembler,
+			KafKaProducerService producerService
 	) {
 		this.employeeRepository = employeeRepository;
 		this.departmentRepository = departmentRepository;
 		this.entityManager = entityManager;
 		this.employeeModelAssembler = employeeModelAssembler;
+		this.producerService = producerService;
 	}
 
 	/**
@@ -64,6 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		employee.setDepartment(optional.get());
 		Employee addedEmployee = employeeRepository.save(employee);
+		producerService.sendMessage(AppConstants.EMPLOYEE_EVENT_CREATE);
 		return new ResponseWrapper<>(employeeModelAssembler.toModel(addedEmployee));		
 	}
 
@@ -136,7 +141,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             return new ResponseWrapper<>(new APIError(0, "Error", "Department with ID: " + departmentId + " does not exist"));
         }
         Employee addedEmployee = employeeRepository.save(employee);
-
+        producerService.sendMessage(AppConstants.EMPLOYEE_EVENT_UPDATE);
         return new ResponseWrapper<>(employeeModelAssembler.toModel(addedEmployee));
 	}
 	
@@ -154,7 +159,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(employeeRepository.findById(employeeId).isPresent()) {
             return new ResponseWrapper<>(new APIError(0, "Error", "Employee with Id " + employeeId + " was not deleted"));
         }
-
+        producerService.sendMessage(AppConstants.EMPLOYEE_EVENT_DELETE);
         return new ResponseWrapper<>("Employee with Id " + employeeId + " was deleted");
 	}
 }
