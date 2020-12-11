@@ -91,7 +91,7 @@ public class EmployeeController {
 			@ApiResponse(code = 200, message = "Processed successfully", response = EmployeeModel.class),
 			@ApiResponse(code = 400, message = "Bad request")
 	})
-	@PutMapping(value = "/employee/{employeeId}", produces = { "application/hal+json" })
+	@PutMapping(value = "/employee", produces = { "application/hal+json" })
     public ResponseEntity<Object> putEmployee(@Valid @RequestBody EmployeeRequestParameters params) {
 		ResponseWrapper<EmployeeModel> response = employeeService.putEmployee(params.toEntity());
 
@@ -106,7 +106,7 @@ public class EmployeeController {
 			@ApiResponse(code = 400, message = "Bad request")
 	})
 	@DeleteMapping(value = "/employee/{employeeId}", produces = { "application/hal+json" })
-    public ResponseEntity<Object> deleteEmployee(@Valid @PathVariable("departmentId") String employeeId) {
+    public ResponseEntity<Object> deleteEmployee(@Valid @PathVariable("employeeId") String employeeId) {
 		ResponseWrapper<Object> response = employeeService.deleteEmployeeById(UUID.fromString(employeeId));
 
         return (response.getData() != null) ?

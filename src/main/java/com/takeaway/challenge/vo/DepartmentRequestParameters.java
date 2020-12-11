@@ -3,6 +3,7 @@ package com.takeaway.challenge.vo;
 import javax.validation.constraints.NotNull;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.util.ObjectUtils;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,7 +20,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class DepartmentRequestParameters {	
-	@NotNull(message = "Department Id cannot be null/empty.")
 	private Long departmentId;
 	
 	@NotNull(message = "Department name cannot be null/empty.")
@@ -27,7 +27,9 @@ public class DepartmentRequestParameters {
 	
 	@JsonCreator
     public DepartmentRequestParameters(    		            
-            @JsonProperty("departmentName") String departmentName) {        
+    		@JsonProperty("departmentId") Long departmentId,
+            @JsonProperty("departmentName") String departmentName) {    
+		this.departmentId = departmentId;
         this.departmentName = departmentName;              
     }
 	
@@ -37,7 +39,10 @@ public class DepartmentRequestParameters {
 	}
 	
 	public Department toEntity() {
-		Department department = new Department();		
+		Department department = new Department();	
+		if(!ObjectUtils.isEmpty(this.departmentId)) {
+			department.setId(this.departmentId);
+		}			
 		department.setName(this.departmentName);
 		
 		return department;

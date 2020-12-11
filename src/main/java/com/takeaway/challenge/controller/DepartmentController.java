@@ -85,7 +85,7 @@ public class DepartmentController {
 			@ApiResponse(code = 200, message = "Processed successfully", response = DepartmentModel.class),
 			@ApiResponse(code = 400, message = "Bad request")
 	})
-	@PutMapping(value = "/department/{departmentId}", produces = { "application/hal+json" })
+	@PutMapping(value = "/department", produces = { "application/hal+json" })
     public ResponseEntity<Object> putDepartment(@Valid @RequestBody DepartmentRequestParameters params) {
 		ResponseWrapper<DepartmentModel> response = departmentService.putDepartment(params.toEntity());
 

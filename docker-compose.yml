@@ -39,7 +39,6 @@ services:
     container_name: kafka
     restart: always
     ports:
-    #- '29092:29092'
     - '9092:9092'      
     expose:
       - '9092'
@@ -63,6 +62,17 @@ services:
     networks:
       - app-tier
 
+  employee-service:
+    image: employee-service
+    container_name: employee-service
+    restart: always
+    ports: 
+      - '8181:8181'
+    depends_on: 
+      - kafka
+    networks:
+      - app-tier
+      
 # Names our volume
 volumes:
   my-db:

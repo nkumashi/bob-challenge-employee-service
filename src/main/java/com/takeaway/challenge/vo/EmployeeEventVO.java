@@ -1,7 +1,6 @@
 package com.takeaway.challenge.vo;
 
-import java.time.LocalDateTime;
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class EmployeeEvent {
+@AllArgsConstructor
+public class EmployeeEventVO {
 	private String eventName;
-	private LocalDateTime eventTimestamp;
+	private String eventTimestamp;
 }
