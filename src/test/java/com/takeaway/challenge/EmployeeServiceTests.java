@@ -31,6 +31,7 @@ import com.takeaway.challenge.model.Employee;
 import com.takeaway.challenge.repository.DepartmentRepository;
 import com.takeaway.challenge.repository.EmployeeRepository;
 import com.takeaway.challenge.service.EmployeeServiceImpl;
+import com.takeaway.challenge.service.KafkaProducerService;
 import com.takeaway.challenge.util.ResponseWrapper;
 
 /**
@@ -41,6 +42,9 @@ import com.takeaway.challenge.util.ResponseWrapper;
 public class EmployeeServiceTests {		
 	@Mock
     private EntityManager entityManager;
+	
+	@Mock
+	private KafkaProducerService producerService;
     
 	@Mock
     private EmployeeRepository employeeRepository;		
