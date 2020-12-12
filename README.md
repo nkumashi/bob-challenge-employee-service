@@ -47,3 +47,4 @@ docker-compose up -d
 	- http://localhost:8181/employee-service/api/departments
 	- http://localhost:8181/employee-service/api/deployment/{deploymentId}
 	- http://localhost:8182/event-service/api/events
+
