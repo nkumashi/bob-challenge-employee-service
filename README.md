@@ -21,3 +21,30 @@ Whenever an employee is created, updated or deleted, an event related to this ac
 #### Restrictions
 
  - The `email field` is unique, i.e. _2 employees cannot have the same email._
+
+# Install and run
+
+# Requirements
+	- Docker/Docker Compose
+	- maven
+	- JDK 1.8
+	- Git client
+	
+# Running the application
+
+	- Naviagte to the root folder of the bob-challenge-employee-service project. Launch the supporting services: ZooKeeper, Kafka and MySQL database by running the command:
+```
+docker-compose up -d
+```
+	
+	- Open the bob-challenge-employee-service project in an IDE like Eclipse/STS. Launch the application as a SpringBoot project.
+
+	- Open the bob-challenge-event-service project in an IDE like Eclipse/STS. Launch the application as a SpringBoot project.
+
+# Application resources available:
+	- http://localhost:8181/employee-service/api/employees
+	- http://localhost:8181/employee-service/api/employee/{employeeId}
+	- http://localhost:8181/employee-service/api/departments
+	- http://localhost:8181/employee-service/api/deployment/{deploymentId}
+	- http://localhost:8182/event-service/api/events
+
