@@ -92,7 +92,7 @@ public class EmployeeController {
 			@ApiResponse(code = 400, message = "Bad request")
 	})
 	@PutMapping(value = "/employee", produces = { "application/hal+json" })
-    public ResponseEntity<Object> putEmployee(@Valid @RequestBody EmployeeRequestParameters params) {
+    public ResponseEntity<Object> putEmployee(@RequestBody EmployeeRequestParameters params) {
 		ResponseWrapper<EmployeeModel> response = employeeService.putEmployee(params.toEntity());
 
         return (response.getData() != null) ?

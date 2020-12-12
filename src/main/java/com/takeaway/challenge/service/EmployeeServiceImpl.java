@@ -1,5 +1,6 @@
 package com.takeaway.challenge.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.takeaway.challenge.constants.AppConstants;
 import com.takeaway.challenge.exception.APIError;
@@ -129,18 +131,36 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public ResponseWrapper<EmployeeModel> putEmployee(Employee employee) {
 		if(!employeeRepository.findById(employee.getId()).isPresent()) {
             return new ResponseWrapper<>(new APIError(0, "Error", "Employee with ID: " + employee.getId() + " does not exist"));
-        }		
-		
-		List<Employee> employeesByEmail = employeeRepository.findByEmail(employee.getEmail());
-		if(employeesByEmail.size() > 0) {
-			return new ResponseWrapper<>(new APIError(0, "Error", "Employee with email: " + employee.getEmail() + " already exist."));
-		}
+        }				
 		
         Long departmentId = employee.getDepartment().getId();
         if(!departmentRepository.findById(departmentId).isPresent()) {
             return new ResponseWrapper<>(new APIError(0, "Error", "Department with ID: " + departmentId + " does not exist"));
         }
-        Employee addedEmployee = employeeRepository.save(employee);
+        
+        Employee toSave = new Employee();
+        if(!ObjectUtils.isEmpty(employee.getEmail())) {
+    		List<Employee> employeesByEmail = employeeRepository.findByEmail(employee.getEmail());
+    		if(employeesByEmail.size() > 0) {
+    			return new ResponseWrapper<>(new APIError(0, "Error", "Employee with email: " + employee.getEmail() + " already exist."));
+    		}
+    		toSave.setEmail(employee.getEmail());
+        }
+        
+        if(!ObjectUtils.isEmpty(employee.getFirstName())) {
+        	toSave.setFirstName(employee.getFirstName());
+        }
+        
+        if(!ObjectUtils.isEmpty(employee.getLastName())) {
+        	toSave.setLastName(employee.getLastName());
+        }
+        
+        if(!ObjectUtils.isEmpty(employee.getDob())) {
+        	toSave.setDob(employee.getDob());
+        }
+        
+        toSave.setDepartment(employee.getDepartment());
+        Employee addedEmployee = employeeRepository.save(toSave);
         producerService.sendMessage(AppConstants.EMPLOYEE_EVENT_UPDATE);
         return new ResponseWrapper<>(employeeModelAssembler.toModel(addedEmployee));
 	}

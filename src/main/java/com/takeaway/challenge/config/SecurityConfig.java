@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests().antMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN").and()
 			.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN").and()
 			.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
-			.anyRequest().authenticated()
+			.anyRequest().permitAll()
 	        .and()
 	        .httpBasic()
 	        .and()
@@ -41,4 +42,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .password("{noop}admin123")
             .roles("ADMIN");
     }
+	
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers("/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**");
+		web.ignoring().antMatchers("/index.html", "/*.js", "/*.js.map", "/*.css", "/favicon.ico");
+	}
 }
