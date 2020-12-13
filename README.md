@@ -42,9 +42,10 @@ docker-compose up -d
 	- Open the bob-challenge-event-service project in an IDE like Eclipse/STS. Launch the application as a SpringBoot project.
 
 # Application resources available:
-	- http://localhost:8181/employee-service/api/employees
-	- http://localhost:8181/employee-service/api/employee/{employeeId}
-	- http://localhost:8181/employee-service/api/departments
-	- http://localhost:8181/employee-service/api/deployment/{deploymentId}
-	- http://localhost:8182/event-service/api/events
+	- Fetch all employees: http://localhost:8181/employee-service/api/employees
+    - Fetch an employee by Id: http://localhost:8181/employee-service/api/employee/{employeeId}
+    - Fetch all departments: http://localhost:8181/employee-service/api/departments
+    - Fetch a department by Id: http://localhost:8181/employee-service/api/deployment/{deploymentId}
+    - Fetch all events: http://localhost:8182/event-service/api/events
+    - OpenAPI specification: http://localhost:8181/employee-service/v3/api-docs/
 
