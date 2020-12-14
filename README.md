@@ -25,32 +25,28 @@ Whenever an employee is created, updated or deleted, an event related to this ac
 # Install and run
 
 # Requirements
-	- Docker/Docker Compose
-	- Maven
-	- JDK 1.8
-	- Git client
+  - Docker/Docker Compose
+  - Maven
+  - JDK 1.8
+  - Git client
 	
 # Running the application
-
-	- Checkout the bob-challenge-employee-service and bob-challenge-event-service projects from github. Make sure you select the naveen branch.
-	
-	- Naviagte to the root folder of the bob-challenge-employee-service project. Launch the supporting services: ZooKeeper, Kafka and MySQL database by running the command:
-		docker-compose up -d
-	
-	- Open the bob-challenge-employee-service project in an IDE like Eclipse/STS. Launch the application as a SpringBoot project.
-
-	- Open the bob-challenge-event-service project in an IDE like Eclipse/STS. Launch the application as a SpringBoot project.
+  - Checkout the bob-challenge-employee-service and bob-challenge-event-service projects from github. Make sure you select the naveen branch.
+  - Naviagte to the root folder of the bob-challenge-employee-service project. Launch the supporting services: ZooKeeper, Kafka and MySQL database by running the command:
+	docker-compose up -d
+  - Open the bob-challenge-employee-service project in an IDE like Eclipse/STS. Launch the application as a SpringBoot project.
+  - Open the bob-challenge-event-service project in an IDE like Eclipse/STS. Launch the application as a SpringBoot project.
 
 # Application resources available:
 Employee service resources:
-	- Fetch all employees: http://localhost:8181/employee-service/api/employees
-    - Fetch an employee by Id: http://localhost:8181/employee-service/api/employee/{employeeId}
-    - Fetch all departments: http://localhost:8181/employee-service/api/departments
-    - Fetch a department by Id: http://localhost:8181/employee-service/api/department/{departmentId}    
-    - OpenAPI specification: http://localhost:8181/employee-service/v3/api-docs/
+  - Fetch all employees: http://localhost:8181/employee-service/api/employees
+  - Fetch an employee by Id: http://localhost:8181/employee-service/api/employee/{employeeId}
+  - Fetch all departments: http://localhost:8181/employee-service/api/departments
+  - Fetch a department by Id: http://localhost:8181/employee-service/api/department/{departmentId}  
+  - OpenAPI specification: http://localhost:8181/employee-service/v3/api-docs/
 
 Employee event service resources:
-	- Fetch an event by Id: http://localhost:8182/event-service/api/event/{eventId}
-    - Fetch all events: http://localhost:8182/event-service/api/events
-    - OpenAPI specification: http://localhost:8182/event-service/v3/api-docs/
+  - Fetch an event by Id: http://localhost:8182/event-service/api/event/{eventId}
+  - Fetch all events: http://localhost:8182/event-service/api/events
+  - OpenAPI specification: http://localhost:8182/event-service/v3/api-docs/
 	
