@@ -1,6 +1,7 @@
 package com.takeaway.challenge.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,6 +11,8 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @author Naveen Kumashi
@@ -18,12 +21,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Configuration  
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)  
-public class SecurityConfig extends WebSecurityConfigurerAdapter {			
+public class SecurityConfig extends WebSecurityConfigurerAdapter {				
 	protected void configure(final HttpSecurity http) throws Exception {
-		http.csrf().disable();	
+		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);	
 		http
-			.authorizeRequests().antMatchers(HttpMethod.GET, "/api/**").permitAll().and()
 			.authorizeRequests().antMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN").and()
 			.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN").and()
 			.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
@@ -36,12 +38,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) 
-            throws Exception {
+            throws Exception {		
         auth.inMemoryAuthentication()
             .withUser("admin")
-            .password("{noop}admin123")
+            .password(passwordEncoder().encode("admin123"))
             .roles("ADMIN");
     }
+	
+	@Bean 
+	public PasswordEncoder passwordEncoder() { 
+	    return new BCryptPasswordEncoder(); 
+	}
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
